@@ -1,5 +1,5 @@
-#Trabalho 1 - Sockets
-##Tarefas:
+# Trabalho 1 - Sockets
+## Tarefas:
 
 Desenvolver uma aplicação em rede usando sockets. A aplicação deverá:
 
