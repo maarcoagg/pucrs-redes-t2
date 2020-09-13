@@ -17,7 +17,7 @@ class UDPClient {
       InetAddress IPAddress = InetAddress.getByName("localhost");
 
       byte[] sendData = new byte[1024];
-      byte[] receiveData = new byte[1024];
+      //byte[] receiveData = new byte[1024];
 
       // le uma linha do teclado
       String sentence = inFromUser.readLine();
