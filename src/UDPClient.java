@@ -1,5 +1,4 @@
-
-// L� uma linha do teclado
+// Le uma linha do teclado
 // Envia o pacote (linha digitada) ao servidor
 
 import java.io.*; // classes para input e output streams e
@@ -14,17 +13,17 @@ class UDPClient {
       // declara socket cliente
       DatagramSocket clientSocket = new DatagramSocket();
 
-      // obtem endere�o IP do servidor com o DNS
+      // obtem endereco IP do servidor com o DNS
       InetAddress IPAddress = InetAddress.getByName("localhost");
 
       byte[] sendData = new byte[1024];
       byte[] receiveData = new byte[1024];
 
-      // l� uma linha do teclado
+      // le uma linha do teclado
       String sentence = inFromUser.readLine();
       sendData = sentence.getBytes();
 
-      // cria pacote com o dado, o endere�o do server e porta do servidor
+      // cria pacote com o dado, o endereco do server e porta do servidor
       DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, 9876);
 
       //envia o pacote

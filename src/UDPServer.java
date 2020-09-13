@@ -1,5 +1,5 @@
 // Recebe um pacote de algum cliente
-// Separa o dado, o endere�o IP e a porta deste cliente
+// Separa o dado, o endereco IP e a porta deste cliente
 // Imprime o dado na tela
 
 import java.io.*;
@@ -20,7 +20,7 @@ class UDPServer {
                   // recebe o pacote do cliente
                   serverSocket.receive(receivePacket);
 
-                  // pega os dados, o endere�o IP e a porta do cliente
+                  // pega os dados, o endereco IP e a porta do cliente
                   // para poder mandar a msg de volta
                   String sentence = new String(receivePacket.getData());
                   InetAddress IPAddress = receivePacket.getAddress();
