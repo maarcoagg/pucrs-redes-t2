@@ -1,57 +1,60 @@
-import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.DataOutputStream;
 import java.net.Socket;
+import java.util.Scanner;
 
 public class TCPClient {
     public static void main (String [] args ) throws IOException {
-        
-        final String fileName = "received_file.txt";
-        final String srcDir = System.getProperty("user.dir");
 
-        // monta path dos arquivos a serem enviados
-        String absoluteFilePath = srcDir + File.separator + "receive" + File.separator + fileName;
+        String filePath = selectFile();
 
-        final String SERVER = "127.0.0.1";  // localhost
-        final String FILE_TO_RECEIVED = absoluteFilePath;  
+        Socket s = new Socket("localhost",9876);
 
-        final int FILE_SIZE = 10*1024;  
-        
-        int bytesRead;
-        int current = 0;
-        FileOutputStream fos = null;
-        BufferedOutputStream bos = null;
-        Socket sock = null;
-        try
+        DataOutputStream dos = new DataOutputStream(s.getOutputStream());
+        FileInputStream fis = new FileInputStream(filePath);
+        byte[] sendData = new byte[10*1024];
+
+        while (fis.read(sendData) > 0)
         {
-            sock = new Socket(SERVER, 9876);
-            System.out.println("Connecting...");
-
-            // receive file
-            byte [] mybytearray  = new byte [FILE_SIZE];
-            InputStream is = sock.getInputStream();
-            fos = new FileOutputStream(FILE_TO_RECEIVED);
-            bos = new BufferedOutputStream(fos);
-            bytesRead = is.read(mybytearray,0,mybytearray.length);
-            current = bytesRead;
-
-            do {
-                bytesRead =
-                    is.read(mybytearray, current, (mybytearray.length-current));
-                if(bytesRead >= 0) current += bytesRead;
-            } while(bytesRead > -1);
-
-            bos.write(mybytearray, 0 , current);
-            bos.flush();
-            System.out.println("File " + FILE_TO_RECEIVED
-                + " downloaded (" + current + " bytes read)");
+            dos.write(sendData);
         }
-        finally {
-            if (fos != null) fos.close();
-            if (bos != null) bos.close();
-            if (sock != null) sock.close();
-        }
+
+        fis.close();
+        dos.close();
+        s.close();
     }
+
+    public static String selectFile()
+   {
+      // guarda nome dos arquivos para montar os paths
+      final String tinyFileName = "file_less_then_1500bytes.txt";
+      final String bigFileName = "file_more_then_10000bytes.txt";
+      final String srcDir = System.getProperty("user.dir");
+
+      // monta path dos arquivos a serem enviados
+      String absoluteTinyFilePath = srcDir + File.separator + "send" + File.separator + tinyFileName;
+      String absoluteBigFilePath = srcDir + File.separator + "send" + File.separator + bigFileName;
+      String filePath = null;
+
+      // pergunta ao cliente qual arquivo deseja enviar
+      System.out.print("\t1 - " + tinyFileName + "\n" +
+                        "\t2 - " + bigFileName + "\n"+
+                        "Selecione qual arquivo enviar (1-2): ");
+      Scanner input = new Scanner(System.in);
+      Integer option = input.nextInt();
+
+      if (option.equals(1))
+         filePath = absoluteTinyFilePath;
+      else if (option.equals(2))
+         filePath = absoluteBigFilePath;
+      else
+      {
+         System.err.println("Opcao invalida! Abortando execucao...");
+         System.exit(1);
+      }
+      input.close();
+      return filePath;
+   }
 }
