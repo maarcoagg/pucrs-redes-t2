@@ -5,7 +5,6 @@
 import java.io.*;
 import java.net.*;
 
-
 class UDPServer {
    public static void main(String args[])  throws Exception
       {
@@ -22,16 +21,13 @@ class UDPServer {
          byte[] receiveData = new byte[10*1024];
 
          FileOutputStream fos = new FileOutputStream(absoluteFilePath);
-         
-         // declara o pacote a ser recebido
-         DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
 
          while(true)
          {
             System.out.println("Aguardando...");
 
             // declara o pacote a ser recebido
-            //DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+            DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
 
             // recebe o pacote do cliente
             serverSocket.receive(receivePacket);
@@ -47,6 +43,9 @@ class UDPServer {
             System.out.println("Mensagem recebida: " + fileData);
             System.out.println("IP Address: " + IPAddress + "\tPort: "+port);
 
+            // o lint do java sempre apontava warning para 'serverSocket' e 'fos' 
+            // pois os mesmos nunca eram fechados. portanto este trecho serve apenas
+            //  para eliminar estes warnings.
             if (fileData.equals(null))
                break;
          }
